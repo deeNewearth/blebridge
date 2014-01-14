@@ -57,7 +57,7 @@ void loop() {
 			Serial.print(F("BLE connected"));
 		
 		bleconnected = true;
-		
+		//working
 	}
 	
 	// Allow BLE Shield to send/receive data
