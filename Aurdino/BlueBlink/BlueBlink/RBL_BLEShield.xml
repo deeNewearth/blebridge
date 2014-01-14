@@ -11,7 +11,6 @@
             <Uuid BaseUUID="713D0000503E4C75BA943148F18D941E" BaseUUIDName="Custom UART">0003</Uuid>
             <DefaultValue></DefaultValue>
             <UsePresentationFormat>0</UsePresentationFormat>
-            <UserDescription></UserDescription>
             <MaxDataLength>20</MaxDataLength>
             <AttributeLenType>2</AttributeLenType>
             <ForceOpen>false</ForceOpen>
@@ -33,7 +32,6 @@
             <Uuid BaseUUID="713D0000503E4C75BA943148F18D941E" BaseUUIDName="Custom UART">0002</Uuid>
             <DefaultValue></DefaultValue>
             <UsePresentationFormat>0</UsePresentationFormat>
-            <UserDescription></UserDescription>
             <MaxDataLength>20</MaxDataLength>
             <AttributeLenType>2</AttributeLenType>
             <ForceOpen>false</ForceOpen>
@@ -59,7 +57,6 @@
             <Uuid>2a27</Uuid>
             <DefaultValue>0A</DefaultValue>
             <UsePresentationFormat>0</UsePresentationFormat>
-            <UserDescription></UserDescription>
             <MaxDataLength>9</MaxDataLength>
             <AttributeLenType>2</AttributeLenType>
             <ForceOpen>false</ForceOpen>
@@ -78,7 +75,7 @@
         </Characteristic>
     </Service>
     <Gapsettings>
-        <Name>BLE Shield</Name>
+        <Name>BlueBlink</Name>
         <DeviceNameWriteLength>10</DeviceNameWriteLength>
         <LocalPipeOnDeviceName>true</LocalPipeOnDeviceName>
         <DeviceNameShortLength>0</DeviceNameShortLength>
@@ -107,6 +104,8 @@
         <MaximumConnectionInterval>18</MaximumConnectionInterval>
         <SlaveLatency>0</SlaveLatency>
         <TimeoutMultipler>10</TimeoutMultipler>
+        <AddServiceUpdateCharacteristic>false</AddServiceUpdateCharacteristic>
+        <AddServiceUpdateCharacteristicPipe>false</AddServiceUpdateCharacteristicPipe>
         <ServiceToAdvertise>
             <Uuid BaseUUID="713D0000503E4C75BA943148F18D941E" BaseUUIDName="Custom UART">0000</Uuid>
         </ServiceToAdvertise>
