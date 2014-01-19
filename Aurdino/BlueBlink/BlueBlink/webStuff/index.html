@@ -2,9 +2,48 @@
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head>
     <title>Untitled Page</title>
+
+    <script type='text/javascript' src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type='text/javascript'>
+    
+
+    $(function() {
+        $('#openSection').attr('href',
+            'blebridge://D34EF537-6D08-D1A2-8994-8058F0EA99C1?Name=BlueBlink&Data=6789670912348a&timeOut=10&retUrl=' +$(location).attr('href').split('?')[0] );
+        
+        $('#openSection').html('test v2: open here');
+
+var queries = {};
+        $.each(document.location.search.substr(1).split('&'),function(c,q){
+            var i = q.split('=');
+            
+            if(i.length >0){
+            
+                if(i.length >1)
+                    queries[i[0].toString()] = i[1].toString();
+                else
+                    queries[i[0].toString()] = "";
+             }
+          });
+        var strQ =JSON.stringify(queries);
+        
+        $('#resSection').html(strQ);
+
+        
+    });
+    </script>
 </head>
 <body>
-<p>hello world</p>
-<a href="blebridge://test1">click to open </a>
+    <p>hello world</p>
+    
+
+
+    <p>
+    <a id="openSection"></a>
+    </p>
+
+    <h3>result</h3>
+    <p id="resSection"></p>
+
 </body>
 </html>
