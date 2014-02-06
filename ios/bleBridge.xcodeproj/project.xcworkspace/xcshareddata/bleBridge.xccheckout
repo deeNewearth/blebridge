@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>6AB17D0A-022B-4E83-9CFE-B7122405D24F</string>
+	<key>IDESourceControlProjectName</key>
+	<string>bleBridge</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>348CB5D6-D74B-4CAA-B6EE-7144F696E39C</key>
+		<string>https://github.com/shreedee/blebridge.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ios/bleBridge.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>348CB5D6-D74B-4CAA-B6EE-7144F696E39C</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/shreedee/blebridge.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>348CB5D6-D74B-4CAA-B6EE-7144F696E39C</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>348CB5D6-D74B-4CAA-B6EE-7144F696E39C</string>
+			<key>IDESourceControlWCCName</key>
+			<string>blebridge</string>
+		</dict>
+	</array>
+</dict>
+</plist>

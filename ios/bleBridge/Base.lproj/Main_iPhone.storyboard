@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+    </dependencies>
+    <scenes>
+        <!--Ble Br View Controller-->
+        <scene sceneID="ufC-wZ-h7g">
+            <objects>
+                <viewController id="vXZ-lx-hvc" customClass="BleBrViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="vqB-ya-XoQ"/>
+                        <viewControllerLayoutGuide type="bottom" id="hqx-il-hGP"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fJH-xH-bIP">
+                                <rect key="frame" x="79" y="448" width="152" height="57"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0mF-kN-0LD">
+                                        <rect key="frame" x="8" y="6" width="68" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Connect">
+                                            <color key="titleShadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="ConnectBtn:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="izn-0N-Voq"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EWq-Zx-kbb">
+                                        <rect key="frame" x="84" y="14" width="48" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Cancel">
+                                            <color key="titleColor" red="1" green="0.082341435350709369" blue="0.38293310160042482" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="CancelBtn:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="dDN-j6-w0Z"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label1" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QBb-Fg-y0O">
+                                <rect key="frame" x="12" y="43" width="287" height="135"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="fJH-xH-bIP" secondAttribute="centerX" id="Bfo-RS-p2w"/>
+                            <constraint firstItem="QBb-Fg-y0O" firstAttribute="top" secondItem="vqB-ya-XoQ" secondAttribute="bottom" constant="20" id="a0p-1b-kKY"/>
+                            <constraint firstAttribute="centerX" secondItem="QBb-Fg-y0O" secondAttribute="centerX" id="ae0-gi-0Nc"/>
+                            <constraint firstItem="QBb-Fg-y0O" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="10" id="pQW-79-I1r"/>
+                            <constraint firstAttribute="trailing" secondItem="QBb-Fg-y0O" secondAttribute="trailing" constant="10" id="r2O-Ua-BFS"/>
+                            <constraint firstItem="hqx-il-hGP" firstAttribute="top" secondItem="fJH-xH-bIP" secondAttribute="bottom" constant="63" id="sp0-RE-dAb"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="label1" destination="QBb-Fg-y0O" id="wUd-oS-ixJ"/>
+                        <outlet property="refCancelBtn" destination="EWq-Zx-kbb" id="WFT-2q-gfz"/>
+                        <outlet property="refConnectBtn" destination="0mF-kN-0LD" id="6hQ-4m-Oau"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="jLW-j0-fnd">
+            <objects>
+                <viewController id="k54-xy-u11" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="28t-AU-J24"/>
+                        <viewControllerLayoutGuide type="bottom" id="u5e-0n-yVV"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="PKL-ie-c9f">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9YT-oZ-12t" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>
