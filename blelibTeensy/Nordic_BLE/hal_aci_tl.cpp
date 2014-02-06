@@ -286,7 +286,8 @@ void hal_aci_tl_init(aci_pins_t *a_pins)
   //Attach the interrupt to the RDYN line as requested by the caller
   if (a_pins->interface_is_interrupt)
   {
-	attachInterrupt(a_pins->interrupt_number, m_rdy_line_handle, LOW); // We use the LOW level of the RDYN line as the atmega328 can wakeup from sleep only on LOW  
+	  //changed ShreeDee using the interrupt_mode instead of Always LOW
+	attachInterrupt(a_pins->interrupt_number, m_rdy_line_handle, a_pins->interrupt_mode); 
   }
 }
 
@@ -382,7 +383,7 @@ hal_aci_data_t * hal_aci_tl_poll_get(void)
 #endif
   if (a_pins_local_ptr->interface_is_interrupt)
   {
-	attachInterrupt(a_pins_local_ptr->interrupt_number, m_rdy_line_handle, LOW);	  
+	attachInterrupt(a_pins_local_ptr->interrupt_number, m_rdy_line_handle, a_pins_local_ptr->interrupt_mode);	  
   }
 
 

@@ -17,7 +17,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "belservices.h"
 #else
 #include <services.h>
-#endif
+#endif //_TEENSY3_
 
 void ble_begin();
 void ble_write(unsigned char data);
@@ -26,7 +26,11 @@ void ble_do_events();
 int ble_read();
 unsigned char ble_available();
 unsigned char ble_connected(void);
-void ble_set_pins(uint8_t reqn, uint8_t rdyn);
 
-#endif
+//0xFF interrupt_number implies we are not using interrupt
+void ble_set_pins(uint8_t reqn, uint8_t rdyn,uint8_t interrupt_number =0xFF, int interrupt_mode = LOW);
+
+
+
+#endif//_BLE_SHIELD_H
 

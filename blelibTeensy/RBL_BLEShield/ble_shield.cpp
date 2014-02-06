@@ -118,13 +118,17 @@ uint8_t *p_before = &rx_buff[0] ;
 uint8_t *p_back = &rx_buff[0];
 static unsigned char is_connected = 0;
 
-static uint8_t reqn_pin = 9, rdyn_pin = 8;
+static uint8_t reqn_pin = 9, rdyn_pin = 8, _interrupt_number=0xFF; int _interrupt_mode = LOW ;
 
-void ble_set_pins(uint8_t reqn, uint8_t rdyn)
+void ble_set_pins(uint8_t reqn, uint8_t rdyn,uint8_t interrupt_number, int interrupt_mode)
 {
 	reqn_pin = reqn;
 	rdyn_pin = rdyn;
+	_interrupt_number=interrupt_number;
+	_interrupt_mode = interrupt_mode;
 }
+
+
 
 void ble_begin()
 {
@@ -170,6 +174,13 @@ void ble_begin()
 	  
 		aci_state.aci_pins.interface_is_interrupt	  = false;
 		aci_state.aci_pins.interrupt_number			  = 1;
+
+		if(_interrupt_number!=0xFF)
+		{
+			aci_state.aci_pins.interface_is_interrupt	  = true;
+			aci_state.aci_pins.interrupt_number			  = _interrupt_number;
+			aci_state.aci_pins.interrupt_mode = _interrupt_mode;
+		}
 
 		//Turn debug printing on for the ACI Commands and Events to be printed on the Serial
 		lib_aci_debug_print(true);

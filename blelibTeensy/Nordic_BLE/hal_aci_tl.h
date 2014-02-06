@@ -85,6 +85,14 @@ typedef struct aci_pins_t
 	bool	interface_is_interrupt;	//Required - true = Uses interrupt on RDYN pin. false - Uses polling on RDYN pin
 	
 	uint8_t	interrupt_number;		//Required when using interrupts, otherwise ignored
+
+	//shree dee added
+	int interrupt_mode; ////Used when using interrupts, otherwise ignored. defaults to  LOW level of the RDYN line as the atmega328 can wakeup from sleep only on LOW  
+
+	aci_pins_t()
+	{
+		interrupt_mode = LOW;
+	}
 } aci_pins_t;
 
 /** @brief Message received hook function.
