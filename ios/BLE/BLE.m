@@ -47,7 +47,24 @@ static int rssi = 0;
     CBUUID *uuid_service = [CBUUID UUIDWithString:@RBL_SERVICE_UUID];
     CBUUID *uuid_char = [CBUUID UUIDWithString:@RBL_CHAR_RX_UUID];
     
-    [self writeValue:uuid_service characteristicUUID:uuid_char p:activePeripheral data:d];
+    
+    NSUInteger length = [d length];
+    NSUInteger chunkSize = 20;
+    NSUInteger offset = 0;
+    
+    
+    
+    do {
+        NSUInteger thisChunkSize = length - offset > chunkSize ? chunkSize : length - offset;
+        NSData* chunk = [NSData dataWithBytesNoCopy:(char *)[d bytes] + offset
+                                             length:thisChunkSize
+                                       freeWhenDone:NO];
+        offset += thisChunkSize;
+        
+        [self writeValue:uuid_service characteristicUUID:uuid_char p:activePeripheral data:chunk];
+    } while (offset < length);
+    
+    
 }
 
 -(void) enableReadNotification:(CBPeripheral *)p

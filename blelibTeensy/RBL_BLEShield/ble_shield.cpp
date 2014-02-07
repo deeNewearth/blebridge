@@ -106,11 +106,21 @@ static bool timing_change_done = false;
 //static bool radio_ack_pending = false;
 
 //The maximum size of a packet is 64 bytes.
+
+#ifdef _TEENSY3_
+#define MAX_TX_BUFF 1024
+#else
 #define MAX_TX_BUFF 64
+#endif
+
 static uint8_t tx_buff[MAX_TX_BUFF];
 uint8_t tx_buffer_len = 0;
 
+#ifdef _TEENSY3_
+#define MAX_RX_BUFF 1024
+#else
 #define MAX_RX_BUFF 64
+#endif
 
 uint8_t rx_buff[MAX_RX_BUFF+1];
 uint8_t rx_buffer_len = 0;

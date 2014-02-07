@@ -97,9 +97,9 @@
         
         if(hex_char2 >= '0' && hex_char2 <='9')
             int_ch2 = (hex_char2-48);
-        else if(hex_char1 >= 'A' && hex_char1 <='F')
+        else if(hex_char2 >= 'A' && hex_char2 <='F')
             int_ch2 = hex_char2-55;
-        else if(hex_char1 >= 'a' && hex_char1 <='f')
+        else if(hex_char2 >= 'a' && hex_char2 <='f')
             int_ch2 = hex_char2-87;
         }
         
@@ -159,9 +159,10 @@ const uint8_t MAGIC_BYTES[] = { 0x45, 0xFF, 0x7E, 0xF0};
             return ;
         }
         
-        NSData* toSend =[self hexStringToData:[inputDict objectForKey:@"Data"] ];
+        NSString* toSendHex =[inputDict objectForKey:@"Data"];
+        NSData* toSend =[self hexStringToData:toSendHex ];
         
-        unsigned int len = [toSend length];
+        unsigned int len = (unsigned )[toSend length];
         NSLog(@"datasize %d bytes",len);
         if(len>1024)
         {
@@ -178,12 +179,26 @@ const uint8_t MAGIC_BYTES[] = { 0x45, 0xFF, 0x7E, 0xF0};
         
         //write length little endian
         uint16_t little = (uint16_t)NSSwapHostIntToLittle(len);
+        
+        /*
+        uint8_t theByte = (uint8_t)(((uint16_t)little)>>8);
+        
+        [sendPacket appendBytes:&theByte length:1];
+        
+        theByte = (uint8_t)little;
+        
+        [sendPacket appendBytes:&theByte length:1];
+         */
+        
         [sendPacket appendBytes:&little length:2];
+        
         
         [sendPacket appendData:toSend];
         
         //write actual data
-        NSLog(@"sending %d bytes",[sendPacket length]);
+        NSLog(@"sending %lu bytes",(unsigned long)[sendPacket length]);
+        NSLog(@"sending data : ");
+        NSLog(@"%@",[self hexRepresentation:sendPacket]);
         [ble write:sendPacket];
         
         
@@ -449,6 +464,10 @@ const uint8_t MAGIC_BYTES[] = { 0x45, 0xFF, 0x7E, 0xF0};
     
 }
 
+
+/**
+    This method is called to open the URL
+ */
 -(void)handleURLOpen:(NSNotification*)_notification
 {
     
@@ -456,6 +475,7 @@ const uint8_t MAGIC_BYTES[] = { 0x45, 0xFF, 0x7E, 0xF0};
    
     if(error)
     {
+        //we go the Timer cause returning rightaway creates a screen blackout. We need to give a bit of time to settle b4 returing control to the caller
         NSLog(@"Triggering invalid choice Timer");
         [NSTimer scheduledTimerWithTimeInterval:(float)5.0 target:self selector:@selector(invalidOpenTimer:)
                                        userInfo:[NSDictionary dictionaryWithObject:error
@@ -475,10 +495,13 @@ const uint8_t MAGIC_BYTES[] = { 0x45, 0xFF, 0x7E, 0xF0};
     if(_timeOutSec<2.0)
         _timeOutSec=30;
     
-    [NSTimer scheduledTimerWithTimeInterval:(float)2.0 target:self selector:@selector(connectionTimer:) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:(float)2.0 target:self selector:@selector(AfterBleDeviceScan:) userInfo:nil repeats:NO];
     
 }
 
+/**
+ we are simply returning invalid call prompt. but taking a bit of time b4 we return
+ */
 -(void) invalidOpenTimer:(NSTimer *)timer
 {
     NSLog(@"invalidOpenTimer time bite");
@@ -556,7 +579,10 @@ const uint8_t MAGIC_BYTES[] = { 0x45, 0xFF, 0x7E, 0xF0};
     [self returnToCaller:@"Timeout"];
 }
 
--(void) connectionTimer:(NSTimer *)timer
+/**
+ We get here once all Ble devies have been scanned
+ */
+-(void) AfterBleDeviceScan:(NSTimer *)timer
 {
     CBPeripheral* p =[self findPeripheral];
     
