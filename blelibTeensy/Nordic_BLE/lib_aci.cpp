@@ -173,42 +173,49 @@ void lib_aci_board_init(aci_state_t *aci_stat)
 }
 
 
-void lib_aci_init(aci_state_t *aci_stat)
+void lib_aci_init(aci_state_t *aci_stat,E_BLE_INIT_MODE eInitMode)
 {
-  uint8_t i;
+	if(E_BLE_INIT_MODE_PRELATCH!=eInitMode)
+	{
+		  uint8_t i;
 
-  for (i = 0; i < PIPES_ARRAY_SIZE; i++)
-  {
-    aci_stat->pipes_open_bitmap[i]          = 0;
-    aci_stat->pipes_closed_bitmap[i]        = 0;
-    aci_cmd_params_open_adv_pipe.pipes[i]   = 0;
-  }
+		  for (i = 0; i < PIPES_ARRAY_SIZE; i++)
+		  {
+			aci_stat->pipes_open_bitmap[i]          = 0;
+			aci_stat->pipes_closed_bitmap[i]        = 0;
+			aci_cmd_params_open_adv_pipe.pipes[i]   = 0;
+		  }
   
-
-
-
-  is_request_operation_pending     = false;
-  is_indicate_operation_pending    = false; 
-  is_open_remote_pipe_pending      = false;
-  is_close_remote_pipe_pending     = false;
 
 
 
+		  is_request_operation_pending     = false;
+		  is_indicate_operation_pending    = false; 
+		  is_open_remote_pipe_pending      = false;
+		  is_close_remote_pipe_pending     = false;
+
+
+
   
   
-  request_operation_pipe           = 0;
-  indicate_operation_pipe          = 0;
+		  request_operation_pipe           = 0;
+		  indicate_operation_pipe          = 0;
   
   
   
-  p_services_pipe_type_map = aci_stat->aci_setup_info.services_pipe_type_mapping;
+		  p_services_pipe_type_map = aci_stat->aci_setup_info.services_pipe_type_mapping;
   
-  p_setup_msgs             = aci_stat->aci_setup_info.setup_msgs;
+		  p_setup_msgs             = aci_stat->aci_setup_info.setup_msgs;
+	}
   
+	
+	hal_aci_tl_init(&aci_stat->aci_pins,eInitMode);
   
-  hal_aci_tl_init(&aci_stat->aci_pins);
-  
-  lib_aci_board_init(aci_stat);
+	
+	if(E_BLE_INIT_MODE_POR==eInitMode)
+	{
+		lib_aci_board_init(aci_stat);
+	}
 }
 
 

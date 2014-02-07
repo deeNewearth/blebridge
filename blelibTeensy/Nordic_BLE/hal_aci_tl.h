@@ -106,10 +106,17 @@ extern void hal_aci_tl_msg_rcv_hook(hal_aci_data_t *received_msg);
  */
 void hal_aci_tl_io_config(void);
 
+//shreedee Lowpower operation
+enum E_BLE_INIT_MODE
+{
+	 E_BLE_INIT_MODE_POR //Normal power on initialization
+	,E_BLE_INIT_MODE_PRELATCH //called to stabilize signals before system is fully operational
+	,E_BLE_INIT_MODE_POST_LATCH //called again in wakeup mode to bring system back to normal
+};
 
 /** ACI Transport Layer initialization.
  */
-void hal_aci_tl_init(aci_pins_t *a_pins);
+void hal_aci_tl_init(aci_pins_t *a_pins,E_BLE_INIT_MODE eInitMode);
 
 /**@brief Sends an ACI command to the radio.
  *  @details

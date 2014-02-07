@@ -18,8 +18,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #else
 #include <services.h>
 #endif //_TEENSY3_
+#include "hal_aci_tl.h"
 
-void ble_begin();
+void ble_begin(E_BLE_INIT_MODE eInitMode);
 void ble_write(unsigned char data);
 void ble_write_bytes(unsigned char *data, unsigned char len);
 void ble_do_events();
@@ -30,7 +31,7 @@ unsigned char ble_connected(void);
 //0xFF interrupt_number implies we are not using interrupt
 void ble_set_pins(uint8_t reqn, uint8_t rdyn,uint8_t interrupt_number =0xFF, int interrupt_mode = LOW);
 
-
+void ble_setAdvtTimeout(uint16_t timeout_inseconds);
 
 #endif//_BLE_SHIELD_H
 

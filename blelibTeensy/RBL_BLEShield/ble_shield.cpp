@@ -128,10 +128,16 @@ void ble_set_pins(uint8_t reqn, uint8_t rdyn,uint8_t interrupt_number, int inter
 	_interrupt_mode = interrupt_mode;
 }
 
-
-
-void ble_begin()
+uint16_t _advt_timeout_inseconds = 180;
+void ble_setAdvtTimeout(uint16_t timeout_inseconds)
 {
+	_advt_timeout_inseconds = timeout_inseconds;
+}
+
+void ble_begin(E_BLE_INIT_MODE eInitMode)
+{
+	//if(E_BLE_INIT_MODE_POST_LATCH!=eInitMode)
+	{
 		 /* Point ACI data structures to the the setup data that the nRFgo studio generated for the nRF8001 */   
 		if (NULL != services_pipe_type_mapping)
 		{
@@ -184,11 +190,17 @@ void ble_begin()
 
 		//Turn debug printing on for the ACI Commands and Events to be printed on the Serial
 		lib_aci_debug_print(true);
-
-		/*We reset the nRF8001 here by toggling the RESET line connected to the nRF8001
+	}
+	
+	/*We reset the nRF8001 here by toggling the RESET line connected to the nRF8001
 		and initialize the data structures required to setup the nRF8001*/
-		lib_aci_init(&aci_state); 
-		delay(100);
+	lib_aci_init(&aci_state,eInitMode); 
+	
+	if(E_BLE_INIT_MODE_PRELATCH!=eInitMode)
+	//if(E_BLE_INIT_MODE_POR==eInitMode)
+	{
+	delay(100);
+	}
 		/*lib_aci_radio_reset();  
 		while (1)
 		{
@@ -295,7 +307,7 @@ static void process_events()
 									Serial.println(F("Evt Device Started: Standby"));
 									//Looking for an iPhone by sending radio advertisements
 									//When an iPhone connects to us we will get an ACI_EVT_CONNECTED event from the nRF8001
-									lib_aci_connect(180/* in seconds */, 0x0050 /* advertising interval 50ms*/);
+									lib_aci_connect(_advt_timeout_inseconds, 0x0050 /* advertising interval 50ms*/);
 									Serial.println(F("Advertising started"));
 									break;
 							}
@@ -347,7 +359,7 @@ static void process_events()
 							is_connected = 0;
 							ack = 1;
 							Serial.println(F("Evt Disconnected/Advertising timed out"));
-							lib_aci_connect(180/* in seconds */, 0x0100 /* advertising interval 100ms*/);
+							lib_aci_connect(_advt_timeout_inseconds, 0x0100 /* advertising interval 100ms*/);
 							Serial.println(F("Advertising started"));        
 							break;
         

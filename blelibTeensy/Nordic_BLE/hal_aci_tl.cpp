@@ -19,6 +19,10 @@
 #include "hal_platform.h"
 #include "hal_aci_tl.h"
 
+#if defined(__BIZUTILS__)
+#include "cmnDefinations.h"
+#endif
+
 #if defined(__SAM3X8E__)
   // nothing here, but we need to do as this, compiler bug?
 #elif defined(_TEENSY3_)
@@ -145,13 +149,18 @@ void m_rdy_line_handle(void)
   
 #if defined(__SAM3X8E__)
   // nothing here, but we need to do as this, compiler bug?
-#elif defined(_TEENSY3_)
+#elif defined(_TEENSY3_) && !defined(__BIZUTILS__)
 	// nothing here, but we need to do as this, compiler bug?
 #else
   sleep_disable();
 #endif
 
-  detachInterrupt(1);
+  //shree dee changed use provided interrupt and note hardcoded to 1
+  //detachInterrupt(1);
+  if (true == a_pins_local_ptr->interface_is_interrupt)
+  {
+	  detachInterrupt(a_pins_local_ptr->interrupt_number);
+  }
   
   // Receive or transmit data
   p_aci_data = hal_aci_tl_poll_get();
@@ -164,9 +173,20 @@ void m_rdy_line_handle(void)
       /* Receive Buffer full.
          Should never happen.
          Spin in a while loop.
-         */	  
-       while(1);
+         */
+		//shreedee changed
+		//don't do that throw
+#if defined(__BIZUTILS__)
+		THROW("BLE Receive Buffer full");
+#else
+		while(1);
+#endif
+
+       
+		
     }
+
+
     if (m_aci_q_is_full(&aci_rx_q))
     {
       /* Disable RDY line interrupt.
@@ -220,75 +240,90 @@ bool hal_aci_tl_event_get(hal_aci_data_t *p_aci_data)
   }
 }
 
-void hal_aci_tl_init(aci_pins_t *a_pins)
+void hal_aci_tl_init(aci_pins_t *a_pins,E_BLE_INIT_MODE eInitMode)
 {
-  received_data.buffer[0] = 0;
-  
-  m_aci_pins_set(a_pins);
-  
-  /*
-  The SPI lines used are mapped directly to the hardware SPI
-  MISO MOSI and SCK
-  Change here if the pins are mapped differently
-  
-  The SPI library assumes that the hardware pins are used
-  */
-  SPI.begin();
-  SPI.setBitOrder(LSBFIRST);
-  SPI.setClockDivider(a_pins->spi_clock_divider);
-  SPI.setDataMode(SPI_MODE0);
-
-
-  
-  /* initialize aci cmd queue */
-  m_aci_q_init(&aci_tx_q);  
-  m_aci_q_init(&aci_rx_q);
-
-  //Configure the IO lines
-  pinMode(a_pins->rdyn_pin,		INPUT_PULLUP);
-  pinMode(a_pins->reqn_pin,		OUTPUT);
-
-  if (UNUSED != a_pins->active_pin)
-  {
-	pinMode(a_pins->active_pin,	INPUT);  
-  }
-  
-
-  if (UNUSED != a_pins->reset_pin)
-  {
-	pinMode(a_pins->reset_pin,	OUTPUT);
-	
-	if (REDBEARLAB_SHIELD_V1_1 == a_pins->board_name)
+	if(E_BLE_INIT_MODE_PRELATCH!=eInitMode)
 	{
-		//The reset for this board is inverted and has a Power On Reset
-		//circuit that takes about 100ms to trigger the reset
-		digitalWrite(a_pins->reset_pin, 1);
-		delay(100);
-		digitalWrite(a_pins->reset_pin, 0);		
+		received_data.buffer[0] = 0;
+		m_aci_pins_set(a_pins);
+  
+	  /*
+	  The SPI lines used are mapped directly to the hardware SPI
+	  MISO MOSI and SCK
+	  Change here if the pins are mapped differently
+  
+	  The SPI library assumes that the hardware pins are used
+	  */
+  
+	  SPI.begin();
+	  SPI.setBitOrder(LSBFIRST);
+	  SPI.setClockDivider(a_pins->spi_clock_divider);
+	  SPI.setDataMode(SPI_MODE0);
+  
+
+  
+	  /* initialize aci cmd queue */
+	  m_aci_q_init(&aci_tx_q);  
+	  m_aci_q_init(&aci_rx_q);
 	}
-	else
+
+	//what a surprise, we have to do it in all cases and now this thing works
+	//if(E_BLE_INIT_MODE_PRELATCH!=eInitMode)
+	//if(E_BLE_INIT_MODE_POST_LATCH!=eInitMode)
 	{
-		digitalWrite(a_pins->reset_pin, 1);
-		digitalWrite(a_pins->reset_pin, 0);		
-		digitalWrite(a_pins->reset_pin, 1);
-	}
+		  //Configure the IO lines
+		  pinMode(a_pins->rdyn_pin,		INPUT_PULLUP);
+		  pinMode(a_pins->reqn_pin,		OUTPUT);
+
+		  if (UNUSED != a_pins->active_pin)
+		  {
+			pinMode(a_pins->active_pin,	INPUT);  
+		  }
+  
+
+		  if (UNUSED != a_pins->reset_pin)
+		  {
+			pinMode(a_pins->reset_pin,	OUTPUT);
 	
+			if (REDBEARLAB_SHIELD_V1_1 == a_pins->board_name)
+			{
+				//The reset for this board is inverted and has a Power On Reset
+				//circuit that takes about 100ms to trigger the reset
+				digitalWrite(a_pins->reset_pin, 1);
+				delay(100);
+				digitalWrite(a_pins->reset_pin, 0);		
+			}
+			else
+			{
+				digitalWrite(a_pins->reset_pin, 1);
+				digitalWrite(a_pins->reset_pin, 0);		
+				digitalWrite(a_pins->reset_pin, 1);
+			}
+	
+		  }
+	
+  
+  
+	  digitalWrite(a_pins->miso_pin, 0);
+	  digitalWrite(a_pins->mosi_pin, 0);
+	  digitalWrite(a_pins->reqn_pin, 1);
+	  digitalWrite(a_pins->sck_pin,  0);  
   }
-  
-  
-  digitalWrite(a_pins->miso_pin, 0);
-  digitalWrite(a_pins->mosi_pin, 0);
-  digitalWrite(a_pins->reqn_pin, 1);
-  digitalWrite(a_pins->sck_pin,  0);  
-  
-  delay(30); //Wait for the nRF8001 to get hold of its lines - the lines float for a few ms after the reset
-  
-  //Attach the interrupt to the RDYN line as requested by the caller
-  if (a_pins->interface_is_interrupt)
-  {
-	  //changed ShreeDee using the interrupt_mode instead of Always LOW
-	attachInterrupt(a_pins->interrupt_number, m_rdy_line_handle, a_pins->interrupt_mode); 
-  }
+	  
+	//shreedee note that the interrupt and wakeup mode donot work together for now
+	if(E_BLE_INIT_MODE_PRELATCH!=eInitMode)
+	//if(E_BLE_INIT_MODE_POR==eInitMode)
+	{
+		  delay(30); //Wait for the nRF8001 to get hold of its lines - the lines float for a few ms after the reset
+	
+		  //Attach the interrupt to the RDYN line as requested by the caller
+		  if (a_pins->interface_is_interrupt)
+		  {
+			  //changed ShreeDee using the interrupt_mode instead of Always LOW
+			attachInterrupt(a_pins->interrupt_number, m_rdy_line_handle, a_pins->interrupt_mode); 
+		  }
+	}
+
 }
 
 bool hal_aci_tl_send(hal_aci_data_t *p_aci_cmd)
@@ -376,13 +411,15 @@ hal_aci_data_t * hal_aci_tl_poll_get(void)
   
 #if defined(__SAM3X8E__)
   // nothing here, but we need to do as this, compiler bug?
-#elif defined(_TEENSY3_)
+#elif defined(_TEENSY3_) && !defined(__BIZUTILS__)
 	// nothing here, but we need to do as this, compiler bug?
 #else
   sleep_enable();
 #endif
+
   if (a_pins_local_ptr->interface_is_interrupt)
   {
+	  //shreedee changes to use provided interrupt_mode
 	attachInterrupt(a_pins_local_ptr->interrupt_number, m_rdy_line_handle, a_pins_local_ptr->interrupt_mode);	  
   }
 

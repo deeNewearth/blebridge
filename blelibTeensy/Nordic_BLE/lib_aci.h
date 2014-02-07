@@ -120,7 +120,7 @@ void lib_aci_debug_print(bool enable);
  *  @details This function shall be used to initialize/reset ACI Library and also Resets the nRF8001 by togging the reset pin of the nRF8001. This function will reset 
  *           all the variables locally used by ACI library to their respective default values.
  */
-void lib_aci_init(aci_state_t *aci_stat);
+void lib_aci_init(aci_state_t *aci_stat,E_BLE_INIT_MODE eInitMode);
 
 
 /** @brief Gets the number of currently available ACI credits.
